@@ -5,7 +5,7 @@
 #include <set>
 
 namespace GEngine::Input {
-    class Keyboard {
+    class GKeyboard {
     public:
         static bool isKeyPressed(::MiniKit::Platform::Keycode button) {
             return _pressedKeys.count(button);
@@ -14,6 +14,6 @@ namespace GEngine::Input {
     private:
         static ::std::set<::MiniKit::Platform::Keycode> _pressedKeys;
 
-    friend class InputManager;
+    friend class GInputManager;
     };
 }

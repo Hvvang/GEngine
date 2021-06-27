@@ -2,13 +2,130 @@
 
 #include <MiniKit/MiniKit.hpp>
 
+#include <iostream>
+
 namespace GEngine::Math {
 
     using ::MiniKit::Graphics::Vector2D;
-    using Vector2i = ::MiniKit::Graphics::int2;
-    using Vector2u = ::MiniKit::Graphics::uint2;
-    using Vector2f = ::MiniKit::Graphics::float2;
-    using Vector2d = ::MiniKit::Graphics::double2;
+
+    template<class T>
+    struct GVector : Vector2D<T> {
+
+        GVector() : Vector2D<T>{ 0, 0 } {};
+        GVector(T x, T y) : Vector2D<T>{ x, y } {};
+        GVector(const Vector2D<T> &data) : Vector2D<T>{ data.x, data.y } {};
+
+        const T *Data() const {
+            return &this->x;
+        }
+
+        T *Data() {
+            return &this->x;
+        }
+
+        float Length() const {
+            return sqrt(this->x * this->x + this->y * this->y);
+        }
+
+        GVector &operator=(const Vector2D<T> &rhs) {
+            this->x = rhs.x;
+            this->y = rhs.y;
+            return *this;
+        }
+        GVector &operator=(const std::initializer_list<T>& lst) {
+            if (lst.size() < 2)
+                throw ::std::invalid_argument("Initializer list has not enough params for GVector construction.");
+            this->x = *lst.begin();
+            this->y = *(lst.begin() + 1);
+            return *this;
+        }
+
+        bool operator==(const Vector2D<T> &rhs) {
+            return this->x == rhs.x && this->y == rhs.y;
+        }
+
+        bool operator!=(const Vector2D<T> &rhs) {
+            return !operator==(rhs);
+        }
+
+        GVector operator+(const Vector2D<T> &rhs) {
+            return GVector<T>(this->x + rhs.x, this->y + rhs.y);
+        }
+
+        GVector operator-(const Vector2D<T> &rhs) {
+            return GVector<T>(this->x - rhs.x, this->y - rhs.y);
+        }
+
+        GVector operator-() {
+            return GVector<T>(-this->x, -this->y);
+        }
+
+        GVector operator*(T rhs) {
+            return GVector<T>(this->x * rhs, this->y * rhs);
+        }
+
+        GVector operator*(const Vector2D<T> &rhs) {
+            return GVector<T>(this->x * rhs.x, this->y * rhs.y);
+        }
+
+        GVector operator/(T rhs) {
+            return GVector<T>(this->x / rhs, this->y / rhs);
+        }
+
+        GVector operator/(const Vector2D<T> &rhs) {
+            return GVector<T>(this->x / rhs.x, this->y / rhs.y);
+        }
+
+        GVector &operator+=(const Vector2D<T> &rhs) {
+            this->x += rhs.x;
+            this->y += rhs.y;
+            return *this;
+        }
+
+        GVector &operator-=(const Vector2D<T> &rhs) {
+            this->x -= rhs.x;
+            this->y -= rhs.y;
+            return *this;
+        }
+
+        GVector &operator*=(T rhs) {
+            this->x *= rhs;
+            this->y *= rhs;
+            return *this;
+        }
+
+        GVector &operator/=(T rhs) {
+            this->x /= rhs;
+            this->y /= rhs;
+            return *this;
+        }
+
+
+        GVector &operator*=(const Vector2D<T> &rhs) {
+            this->x *= rhs.x;
+            this->y *= rhs.y;
+            return *this;
+        }
+
+        GVector &operator/=(const Vector2D<T> &rhs) {
+            this->x /= rhs.x;
+            this->y /= rhs.y;
+            return *this;
+        }
+
+        static const GVector<T> ZERO;
+        static const GVector<T> LEFT;
+        static const GVector<T> RIGHT;
+        static const GVector<T> UP;
+        static const GVector<T> DOWN;
+        static const GVector<T> ONE;
+
+    };
+
+    using Vector2i = GVector<int32_t>;
+    using Vector2u = GVector<uint32_t>;
+    using Vector2f = GVector<float>;
+    using Vector2d = GVector<double>;
 
     /*!
      *  Overload of binary operator !=.
@@ -156,4 +273,23 @@ namespace GEngine::Math {
     Vector2D<T> operator/(const Vector2D<T> &left, T right) {
         return {left.x / right, left.y / right};
     }
+
+    template<class T>
+    std::ostream& operator<<(std::ostream& out, const Vector2D<T> &vector) {
+        out << "GVector(" << vector.x << ", " << vector.y << ");";
+        return out;
+    }
+
+    template <class T>
+    const GVector<T> GVector<T>::ZERO{ 0, 0 };
+    template <class T>
+    const GVector<T> GVector<T>::ONE{ 1, 1 };
+    template <class T>
+    const GVector<T> GVector<T>::DOWN{ 0, -1 };
+    template <class T>
+    const GVector<T> GVector<T>::UP{ 0, 1 };
+    template <class T>
+    const GVector<T> GVector<T>::LEFT{ -1, 0 };
+    template <class T>
+    const GVector<T> GVector<T>::RIGHT{ 1, 0 };
 }

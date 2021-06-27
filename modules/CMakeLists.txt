@@ -1,21 +1,21 @@
 cmake_minimum_required(VERSION 3.17)
 
 set(MathHeaders
-        include/GEngine/Math/Vector.hpp
-        include/GEngine/Math/Rect.hpp
-)
+        include/GEngine/Math/GVector.hpp
+        include/GEngine/Math/GRect.hpp
+        include/GEngine/Math/GColor.hpp)
 
 set(MathSources
 )
 
 set(InputHeaders
-        include/GEngine/Input/InputManager.hpp
-        include/GEngine/Input/Mouse.hpp
-        include/GEngine/Input/Keyboard.hpp
+        include/GEngine/Input/GInputManager.hpp
+        include/GEngine/Input/GMouse.hpp
+        include/GEngine/Input/GKeyboard.hpp
 )
 
 set(InputSources
-        src/Input/InputManager.cpp
+        src/Input/GInputManager.cpp
 )
 
 
@@ -38,11 +38,9 @@ target_compile_features(GEngine.Framework PUBLIC cxx_std_17)
 
 target_precompile_headers(GEngine.Framework
         PRIVATE
-        <cstdint>
-        <memory>
-        <string>
-        <type_traits>
+        <iostream>
         <vector>
+        <set>
 )
 
 target_include_directories(GEngine.Framework
