@@ -3,11 +3,11 @@ cmake_minimum_required(VERSION 3.17)
 set(CoreHeaders
         include/GEngine/Core/GEngine.hpp
         include/GEngine/Core/GApplication.hpp
-)
+        include/GEngine/Core/GWindow.hpp include/GEngine/Core/GObject.hpp)
 
 set(CoreSources
         src/Core/GEngine.cpp
-)
+        src/Core/GWindow.cpp)
 
 set(MathHeaders
         include/GEngine/Math/GVector.hpp
@@ -33,18 +33,29 @@ set(EventHeaders
         include/GEngine/Event/GEvent.hpp
         include/GEngine/Event/GEventSystem.hpp
         include/GEngine/Event/GHandler.hpp
+        src/View/GViewport.cpp
+        include/GEngine/View/GViewport.hpp
 )
 
+set(ViewHeaders
+        include/GEngine/View/GViewport.hpp
+)
+
+set(ViewSources
+        src/View/GViewport.cpp
+)
 
 add_library(GEngine.Framework STATIC
+        ${CoreHeaders}
         ${MathHeaders}
         ${InputHeaders}
         ${EventHeaders}
-        ${CoreHeaders}
+        ${ViewHeaders}
 
+        ${CoreSources}
         ${MathSources}
         ${InputSources}
-        ${CoreSources}
+        ${ViewSources}
 
 )
 

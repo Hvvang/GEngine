@@ -1,21 +1,25 @@
 cmake_minimum_required(VERSION 3.17)
 
-project(Engine VERSION 1.0 LANGUAGES CXX OBJCXX)
+project(Sandbox VERSION 1.0 LANGUAGES CXX OBJCXX)
 
 add_definitions(-DDEBUG)
 
-add_executable(sandbox
+add_executable(${PROJECT_NAME}
         main.cpp
 )
 
 if (APPLE)
-    target_compile_options(sandbox PRIVATE "-fobjc-arc")
+    target_compile_options(${PROJECT_NAME} PRIVATE "-fobjc-arc")
 elseif (WIN32)
     # none
 endif()
 
-target_link_libraries(sandbox
+target_link_libraries(${PROJECT_NAME}
         PRIVATE
         MiniKit::MiniKit
         GEngine::GEngine
 )
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/sandbox/assets $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets)
+

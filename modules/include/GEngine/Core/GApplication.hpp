@@ -1,25 +1,28 @@
 #pragma once
-
+#include <MiniKit/MiniKit.hpp>
+#include <GEngine/Core/GWindow.hpp>
 #include <GEngine/Input/GInputManager.hpp>
 
 namespace GEngine::Core {
 
     class GApplication : public ::MiniKit::Engine::Application {
-    private:
-        ::std::error_code Start(::MiniKit::Engine::Context &context) noexcept override {
+    public:
+        virtual ::std::error_code Start(::MiniKit::Engine::Context &context) noexcept {
             auto &window = context.GetWindow();
             window.AddResponder(Engine::InputManager);
+
+            Engine::Context = &context;
+            Engine::Window = new GWindow(&context);
+            ::std::clog << "window inited" << ::std::endl;
             return {};
         }
-        ::std::error_code Shutdown(::MiniKit::Engine::Context &context) noexcept override {
+        virtual ::std::error_code Shutdown(::MiniKit::Engine::Context &context) noexcept {
             auto &window = context.GetWindow();
             window.RemoveResponder(Engine::InputManager);
+
+            delete Engine::Window;
             return {};
         }
-        void Tick(::MiniKit::Engine::Context &context) noexcept override {
-            GameLoop(context);
-        }
-    public:
-        virtual void GameLoop(::MiniKit::Engine::Context &context) noexcept = 0;
+        virtual void Tick(::MiniKit::Engine::Context &context) noexcept = 0;
     };
 }
