@@ -1,9 +1,19 @@
 cmake_minimum_required(VERSION 3.17)
 
+set(CoreHeaders
+        include/GEngine/Core/GEngine.hpp
+        include/GEngine/Core/GApplication.hpp
+)
+
+set(CoreSources
+        src/Core/GEngine.cpp
+)
+
 set(MathHeaders
         include/GEngine/Math/GVector.hpp
         include/GEngine/Math/GRect.hpp
-        include/GEngine/Math/GColor.hpp)
+        include/GEngine/Math/GColor.hpp
+)
 
 set(MathSources
 )
@@ -18,13 +28,23 @@ set(InputSources
         src/Input/GInputManager.cpp
 )
 
+set(EventHeaders
+        include/GEngine/Event/GBaseHandler.hpp
+        include/GEngine/Event/GEvent.hpp
+        include/GEngine/Event/GEventSystem.hpp
+        include/GEngine/Event/GHandler.hpp
+)
+
 
 add_library(GEngine.Framework STATIC
         ${MathHeaders}
         ${InputHeaders}
+        ${EventHeaders}
+        ${CoreHeaders}
 
         ${MathSources}
         ${InputSources}
+        ${CoreSources}
 
 )
 

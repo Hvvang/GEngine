@@ -1,27 +1,62 @@
-#include "GEngine/Input/GInputManager.hpp"
+#include <GEngine/Input/GInputManager.hpp>
+#include <GEngine/Core/GEngine.hpp>
 
 #include <GEngine/Input/GMouse.hpp>
 #include <GEngine/Input/GKeyboard.hpp>
 
+#include "GEngine/Event/GEventSystem.hpp"
+
+using namespace GEngine::Core;
+
 namespace GEngine::Input {
     void GInputManager::KeyDown(Window &window, const KeyEvent &event) noexcept {
-        GKeyboard::_pressedKeys.insert(event.keycode);
+        if (!GKeyboard::_pressedKeys.count(event.keycode)) {
+            GKeyboard::_pressedKeys.insert(event.keycode);
+
+            Engine::EventManager.emit(
+                    new GKeyboardEvent(Event::GEvent::KeyPress, event.keycode)
+            );
+        }
     }
 
     void GInputManager::KeyUp(Window &window, const KeyEvent &event) noexcept {
-        GKeyboard::_pressedKeys.erase(event.keycode);
+        if (GKeyboard::_pressedKeys.count(event.keycode)) {
+            GKeyboard::_pressedKeys.erase(event.keycode);
+
+            GEngine::Core::Engine::EventManager.emit(
+                    new GKeyboardEvent(Event::GEvent::KeyRelease, event.keycode)
+            );
+        }
     }
 
     void GInputManager::MouseDown(Window &window, const MouseEvent &event) noexcept {
-        GMouse::_pressedButtons.insert(event.button);
+        if (!GMouse::_pressedButtons.count(event.button)) {
+            GMouse::_pressedButtons.insert(event.button);
+
+            GEngine::Core::Engine::EventManager.emit(
+                    new GMouseEvent(Event::GEvent::MouseButtonPress, GMouse::_mousePosition, event.button)
+            );
+        }
     }
 
     void GInputManager::MouseUp(Window &window, const MouseEvent &event) noexcept {
-        GMouse::_pressedButtons.erase(event.button);
+        if (GMouse::_pressedButtons.count(event.button)) {
+            GMouse::_pressedButtons.erase(event.button);
+
+            GEngine::Core::Engine::EventManager.emit(
+                    new GMouseEvent(Event::GEvent::MouseButtonRelease, GMouse::_mousePosition, event.button)
+            );
+        }
     }
 
     void GInputManager::MouseMoved(Window &window, const MouseEvent &event) noexcept {
-        GMouse::_mousePosition = { event.x, event.y };
+        if (GMouse::_mousePosition != Vector2i{ event.x, event.y }) {
+            GMouse::_mousePosition = { event.x, event.y };
+
+            GEngine::Core::Engine::EventManager.emit(
+                    new GMouseEvent(Event::GEvent::MouseMove, GMouse::_mousePosition, event.button)
+            );
+        }
     }
 }
 
