@@ -28,8 +28,4 @@ namespace GEngine::Input {
 
     friend class GInputManager;
     };
-
-    ::std::set<::MiniKit::Platform::MouseButton> GMouse::_pressedButtons{};
-    Vector2i GMouse::_mousePosition{};
-
 }

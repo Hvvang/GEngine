@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GEngine/Core/GObject.hpp>
+#include <GEngine/View/GCamera.hpp>
 #include <GEngine/Core/GEngine.hpp>
 #include <GEngine/Core/GWindow.hpp>
 #include <GEngine/Math/GVector.hpp>
@@ -10,6 +11,9 @@ using namespace GEngine::Core;
 using namespace GEngine::Math;
 
 namespace GEngine::View {
+
+    class GCamera;
+
     class GViewport : public GObject {
     public:
         GViewport();
@@ -26,19 +30,31 @@ namespace GEngine::View {
 
         const FloatRect &GetRect() const noexcept;
 
-        template<class T>
-        Vector2f RealPointInViewport(const T &point) {
-            return point - _representation.getPosition();
+        GCamera &AddCamera() {
+            if (!_camera)
+                _camera = ::std::make_unique<GCamera>();
+            return *_camera;
         }
 
         template<class T>
-        Vector2f ViewportPointInReal(const T &point) {
-            return _representation.getPosition() + point;
+        Vector2f WorldPointInViewport(const T &point) {
+            if (!_camera) {
+                return point - _representation.getPosition();
+            }
+            return point + _camera->GetPosition() - _representation.getPosition();
+        }
+
+        template<class T>
+        Vector2f ViewportPointInWorld(const T &point) {
+            if (!_camera) {
+                return _representation.getPosition() + point;
+            }
+            return (_representation.getPosition() - Vector2f {_camera->GetPosition().x, -_camera->GetPosition().y} + point) * _camera->GetZoom();
         }
 
         template<class T>
         Vector2f ViewportPointInDrawable(const T &point) {
-            return Engine::Window->template RealPointInDrawable(ViewportPointInReal(point));
+            return Engine::Window->template RealPointInDrawable(ViewportPointInWorld(point));
         }
 
         template<class T>
@@ -47,6 +63,7 @@ namespace GEngine::View {
         }
 
     private:
+        ::std::unique_ptr<GCamera> _camera{ nullptr };
         FloatRect _representation = FloatRect::ZERO;
 
     };

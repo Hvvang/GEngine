@@ -2,9 +2,7 @@
 
 namespace GEngine::View {
 
-    GViewport::GViewport() : GObject(Engine::Context) {
-        _name = "Viewport";
-    }
+    GViewport::GViewport() : GObject(Engine::Context) { _name = "Viewport"; }
 
     GViewport::GViewport(const FloatRect &rect) : GViewport() {
         _representation = rect;

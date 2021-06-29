@@ -33,16 +33,16 @@ set(EventHeaders
         include/GEngine/Event/GEvent.hpp
         include/GEngine/Event/GEventSystem.hpp
         include/GEngine/Event/GHandler.hpp
-        src/View/GViewport.cpp
-        include/GEngine/View/GViewport.hpp
 )
 
 set(ViewHeaders
         include/GEngine/View/GViewport.hpp
+        include/GEngine/View/GCamera.hpp
 )
 
 set(ViewSources
         src/View/GViewport.cpp
+        include/GEngine/View/GCamera.cpp
 )
 
 add_library(GEngine.Framework STATIC

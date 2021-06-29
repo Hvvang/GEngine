@@ -9,6 +9,12 @@
 using namespace GEngine::Core;
 
 namespace GEngine::Input {
+
+    /// GMouse and GKeyboard fields property prededef
+    ::std::set<::MiniKit::Platform::Keycode> GKeyboard::_pressedKeys{};
+    ::std::set<::MiniKit::Platform::MouseButton> GMouse::_pressedButtons{};
+    Vector2i GMouse::_mousePosition{};
+
     void GInputManager::KeyDown(Window &window, const KeyEvent &event) noexcept {
         if (!GKeyboard::_pressedKeys.count(event.keycode)) {
             GKeyboard::_pressedKeys.insert(event.keycode);

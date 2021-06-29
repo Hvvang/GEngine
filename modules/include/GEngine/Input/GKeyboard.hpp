@@ -16,6 +16,4 @@ namespace GEngine::Input {
 
     friend class GInputManager;
     };
-
-    ::std::set<::MiniKit::Platform::Keycode> GKeyboard::_pressedKeys{};
 }

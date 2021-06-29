@@ -7,6 +7,8 @@
 
 #include <GEngine/View/GViewport.hpp>
 
+#include <GEngine/Input/GKeyboard.hpp>
+
 #include <iostream>
 
 using namespace GEngine::Core;
@@ -32,11 +34,11 @@ public:
         }
 
         view.SetRect({
-            context.GetWindow().GetDrawableWidth() / 2.f,
-            context.GetWindow().GetDrawableHeight() / 2.f,
-            context.GetWindow().GetDrawableWidth() / 2.f,
-            context.GetWindow().GetDrawableHeight() / 2.f
+            0.f, 0.f,
+            float(context.GetWindow().GetDrawableWidth()), float(context.GetWindow().GetDrawableHeight())
         });
+        auto &mainCamera = view.AddCamera();
+//        mainCamera.SetPosition(Vector2f{ context.GetWindow().GetDrawableWidth() / 2.f, context.GetWindow().GetDrawableHeight() / 2.f });
 
         return ::MiniKit::MakeErrorCode(::MiniKit::Error::None);
     }
@@ -49,20 +51,54 @@ public:
 
         auto& graphicsDevice = context.GetGraphicsDevice();
 
+        // Camera Update
+        auto &camera = view.AddCamera();
+        {
+            if (::GEngine::Input::GKeyboard::isKeyPressed(MiniKit::Platform::Keycode::KeyLeft)) {
+                camera.Move(Vector2f::LEFT);
+            }
+            if (::GEngine::Input::GKeyboard::isKeyPressed(MiniKit::Platform::Keycode::KeyRight)) {
+                camera.Move(Vector2f::RIGHT);
+            }
+            if (::GEngine::Input::GKeyboard::isKeyPressed(MiniKit::Platform::Keycode::KeyDown)) {
+                camera.Move(Vector2f::DOWN);
+            }
+            if (::GEngine::Input::GKeyboard::isKeyPressed(MiniKit::Platform::Keycode::KeyUp)) {
+                camera.Move(Vector2f::UP);
+            }
+
+            if (::GEngine::Input::GKeyboard::isKeyPressed(MiniKit::Platform::Keycode::KeyEqual)) {
+                camera.ZoomIn();
+            }
+            if (::GEngine::Input::GKeyboard::isKeyPressed(MiniKit::Platform::Keycode::KeyMinus)) {
+                camera.ZoomOut();
+            }
+            if (::GEngine::Input::GKeyboard::isKeyPressed(MiniKit::Platform::Keycode::Key0)) {
+                camera.SetZoom(1.f);
+            }
+        }
+
         // Rendering
         auto& commandBuffer = graphicsDevice.BeginFrame(1.0f, 1.0f, 1.0f, 1.0f);
         {
             commandBuffer.SetImage(*ubisoftLogoImage_);
 
+            ::MiniKit::Graphics::DrawInfo drawDynamicLogo{};
+
+            drawDynamicLogo.position = view.ViewportPointInDrawable(
+                    Vector2f{ window.GetDrawableWidth() / 2.f, window.GetDrawableHeight() - ubisoftLogoImage_->GetSize().height / 2.f }
+            );
+            drawDynamicLogo.scale *= camera.GetZoom();
+            drawDynamicLogo.tint.alpha = 1.f;
+
+            commandBuffer.Draw(drawDynamicLogo);
+
             ::MiniKit::Graphics::DrawInfo drawStaticLogo{};
-
-            drawStaticLogo.position = Engine::Window->RealPointInDrawable(view.GetRect().getPosition());
-
-            ::std::clog << "Position : " << drawStaticLogo.position << ::std::endl;
-
-            drawStaticLogo.scale = { 1.f, 1.f };
+            drawStaticLogo.position = view.ViewportPointInDrawable(
+                    Vector2f{ window.GetDrawableWidth() / 2.f - ubisoftLogoImage_->GetSize().width, window.GetDrawableHeight() - ubisoftLogoImage_->GetSize().height / 2.f }
+            );
+            drawStaticLogo.scale *= camera.GetZoom();
             drawStaticLogo.tint.alpha = 1.f;
-
             commandBuffer.Draw(drawStaticLogo);
 
         }

@@ -13,7 +13,6 @@ namespace GEngine::Core {
 
             Engine::Context = &context;
             Engine::Window = new GWindow(&context);
-            ::std::clog << "window inited" << ::std::endl;
             return {};
         }
         virtual ::std::error_code Shutdown(::MiniKit::Engine::Context &context) noexcept {
