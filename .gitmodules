@@ -1,3 +1,6 @@
 [submodule "external/minikit"]
 	path = external/minikit
 	url = git@gitlab.ucode.world:services/minikit.git
+[submodule "external/entityx"]
+	path = external/entityx
+	url = https://github.com/alecthomas/entityx.git
