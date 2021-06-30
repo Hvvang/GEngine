@@ -208,7 +208,7 @@ namespace GEngine::Math {
     }
 
     template<class T>
-    std::ostream& operator<<(std::ostream& out, const Rect2D<T> &rect) {
+    std::ostream &operator<<(std::ostream& out, const Rect2D<T> &rect) {
         out << "GRect(" << rect.position.x << ", " << rect.position.y << ", " << rect.size.width << ", " << rect.size.height << ");";
         return out;
     }

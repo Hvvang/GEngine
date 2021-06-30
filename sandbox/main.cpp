@@ -16,6 +16,7 @@
 
 using namespace GEngine::Core;
 using namespace GEngine::View;
+using namespace GEngine::Input;
 
 class Sandbox final : public GApplication {
 public:
@@ -52,8 +53,6 @@ public:
         auto& window = context.GetWindow();
         window.SetTitle(title.c_str());
 
-        auto& graphicsDevice = context.GetGraphicsDevice();
-
         // Camera Update
         auto &camera = view.AddCamera();
         {
@@ -82,30 +81,18 @@ public:
         }
 
         // Rendering
-        auto& commandBuffer = graphicsDevice.BeginFrame(1.0f, 1.0f, 1.0f, 1.0f);
+        Engine::Renderer->BeginRender(GColor::WHITE);
         {
-            commandBuffer.SetImage(*ubisoftLogoImage_);
+            ::GEngine::Graphics::GSprite ubisoftSprite;
 
-            ::MiniKit::Graphics::DrawInfo drawDynamicLogo{};
+            ubisoftSprite._sprite = ubisoftLogoImage_.get();
+            ubisoftSprite.GetTransform().SetPosition({0.f, 0.f});
+            ubisoftSprite.GetTransform().SetScale({1.f, 1.f});
 
-            drawDynamicLogo.position = view.ViewportPointInDrawable(
-                    Vector2f{ window.GetDrawableWidth() / 2.f, window.GetDrawableHeight() - ubisoftLogoImage_->GetSize().height / 2.f }
-            );
-            drawDynamicLogo.scale *= camera.GetZoom();
-            drawDynamicLogo.tint.alpha = 1.f;
-
-            commandBuffer.Draw(drawDynamicLogo);
-
-            ::MiniKit::Graphics::DrawInfo drawStaticLogo{};
-            drawStaticLogo.position = view.ViewportPointInDrawable(
-                    Vector2f{ window.GetDrawableWidth() / 2.f - ubisoftLogoImage_->GetSize().width, window.GetDrawableHeight() - ubisoftLogoImage_->GetSize().height / 2.f }
-            );
-            drawStaticLogo.scale *= camera.GetZoom();
-            drawStaticLogo.tint.alpha = 1.f;
-            commandBuffer.Draw(drawStaticLogo);
+            Engine::Renderer->DrawSprite(ubisoftSprite);
 
         }
-        graphicsDevice.EndFrame(commandBuffer);
+        Engine::Renderer->EndRender();
     }
 
     void onMouseEvent(GMouseEvent *event) {

@@ -2,6 +2,7 @@
 #include <MiniKit/MiniKit.hpp>
 #include <GEngine/Core/GWindow.hpp>
 #include <GEngine/Input/GInputManager.hpp>
+#include <GEngine/Graphics/GRenderer.hpp>
 
 namespace GEngine::Core {
 
@@ -13,6 +14,7 @@ namespace GEngine::Core {
 
             Engine::Context = &context;
             Engine::Window = new GWindow(&context);
+            Engine::Renderer = new ::GEngine::Graphics::GRenderer;
             return {};
         }
         virtual ::std::error_code Shutdown(::MiniKit::Engine::Context &context) noexcept {
@@ -20,6 +22,7 @@ namespace GEngine::Core {
             window.RemoveResponder(Engine::InputManager);
 
             delete Engine::Window;
+            delete Engine::Renderer;
             return {};
         }
         virtual void Tick(::MiniKit::Engine::Context &context) noexcept = 0;

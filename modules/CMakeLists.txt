@@ -16,7 +16,7 @@ set(MathHeaders
 )
 
 set(MathSources
-)
+        src/Math/MathPredef.cpp)
 
 set(InputHeaders
         include/GEngine/Input/GInputManager.hpp

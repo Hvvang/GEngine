@@ -8,7 +8,7 @@ namespace GEngine::Graphics {
 
         void SetOrigin(const Vector2f &origin) noexcept { _origin = origin; }
 
-        void SetPosition(const Vector2f &origin) noexcept { _origin = origin; }
+        void SetPosition(const Vector2f &position) noexcept { _position = position; }
 
         void SetScale(const Vector2f &scale) noexcept { _scale = scale; }
 

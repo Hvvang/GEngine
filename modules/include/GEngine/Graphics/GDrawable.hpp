@@ -8,11 +8,12 @@
 namespace GEngine::Graphics {
 
     struct GDrawable : entityx::Component<GDrawable> {
-    protected:
-        virtual void draw(::MiniKit::Graphics::CommandBuffer &commandBuffer) = 0;
 
         ::MiniKit::Graphics::Image *_sprite {nullptr};
         ::GEngine::Math::GColor _spriteColor = ::GEngine::Math::GColor::BLACK;
         ::GEngine::Math::UIntRect _tileRect = ::GEngine::Math::UIntRect::INF;
+
+    private:
+        virtual void draw(::MiniKit::Graphics::CommandBuffer &commandBuffer) const = 0;
     };
 }

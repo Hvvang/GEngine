@@ -7,6 +7,8 @@
 namespace GEngine::Graphics {
 
     struct GSprite : GDrawable, GTransformable {
+
+    private:
         void draw(::MiniKit::Graphics::CommandBuffer &commandBuffer) const override {
             commandBuffer.SetImage(*_sprite);
             ::MiniKit::Graphics::DrawInfo info = {
@@ -22,5 +24,7 @@ namespace GEngine::Graphics {
                 commandBuffer.Draw(info, _tileRect);
             }
         }
+
+    friend class GRenderer;
     };
 }

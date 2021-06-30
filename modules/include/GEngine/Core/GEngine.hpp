@@ -10,8 +10,9 @@ namespace GEngine::Event {
     class GEventSystem;
 }
 
-using namespace GEngine::Event;
-using namespace GEngine::Input;
+namespace GEngine::Graphics {
+    class GRenderer;
+}
 
 namespace GEngine::Core {
 
@@ -26,6 +27,7 @@ namespace GEngine::Core {
         static ::GEngine::Event::GEventSystem EventManager;
         static ::GEngine::Input::GInputManager InputManager;
         static ::GEngine::Core::GWindow *Window;
+        static ::GEngine::Graphics::GRenderer *Renderer;
 
         static void InitWindow(const ::std::string &title, uint32_t width, uint32_t height, bool VSync = false);
 

@@ -39,7 +39,7 @@ namespace GEngine::Graphics {
             if (!_commandBuffer) {
                 throw ::std::runtime_error("GRenderer::BeginRender was not called before.");
             }
-            sprite.draw();
+            sprite.draw(*_commandBuffer);
         }
 
     private:
