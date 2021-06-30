@@ -9,6 +9,9 @@
 
 #include <GEngine/Input/GKeyboard.hpp>
 
+#include <GEngine/Graphics/GSprite.hpp>
+#include <GEngine/Graphics/GRenderer.hpp>
+
 #include <iostream>
 
 using namespace GEngine::Core;

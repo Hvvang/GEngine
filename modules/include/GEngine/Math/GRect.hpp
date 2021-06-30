@@ -11,6 +11,7 @@ namespace GEngine::Math {
     struct GRect : Rect2D<T> {
 
         static const GRect<T> ZERO;
+        static const GRect<T> INF;
 
         /*!
          * Default Constructor of 2D Rectangle with default position and size equal zero.
@@ -214,5 +215,7 @@ namespace GEngine::Math {
 
     template <class T>
     const GRect<T> GRect<T>::ZERO{ 0, 0, 0, 0 };
+    template <class T>
+    const GRect<T> GRect<T>::INF{ 0, 0, ::std::numeric_limits<T>::infinity(), ::std::numeric_limits<T>::infinity() };
 
 }

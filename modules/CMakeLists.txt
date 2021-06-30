@@ -42,8 +42,12 @@ set(ViewHeaders
 
 set(ViewSources
         src/View/GViewport.cpp
-        include/GEngine/View/GCamera.cpp
+        src/View/GCamera.cpp
 )
+
+set(GraphicsHeaders
+        include/GEngine/Graphics/GRenderer.hpp
+        include/GEngine/Graphics/GDrawable.hpp include/GEngine/Graphics/GSprite.hpp include/GEngine/Graphics/GTransformable.hpp include/GEngine/Graphics/GTransform.hpp)
 
 add_library(GEngine.Framework STATIC
         ${CoreHeaders}
@@ -51,6 +55,7 @@ add_library(GEngine.Framework STATIC
         ${InputHeaders}
         ${EventHeaders}
         ${ViewHeaders}
+        ${GraphicsHeaders}
 
         ${CoreSources}
         ${MathSources}
@@ -82,6 +87,9 @@ target_include_directories(GEngine.Framework
         src
 )
 
-target_link_libraries(GEngine.Framework PUBLIC MiniKit::MiniKit)
+target_link_libraries(GEngine.Framework PUBLIC
+        MiniKit::MiniKit
+        entityx
+)
 
 add_library(GEngine::GEngine ALIAS GEngine.Framework)
